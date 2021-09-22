@@ -14,6 +14,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var movies = [[String:Any]]()
     
+    // Get the movies data
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,6 +41,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return movies.count
     }
     
+    // For each row in the TableView create a cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as! MovieCell
         
@@ -56,6 +58,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.synopsisLabel?.text = synopsis
         
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        // Find the movie corresponding to the selected cell
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let movie = movies[indexPath.row]
+        
+        // Pass the movie to the MovieDetailsViewController
+        let detailsVC = segue.destination as! MovieDetailsViewController
+        detailsVC.movie = movie
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
